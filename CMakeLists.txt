@@ -3,8 +3,11 @@ project(drone)
 set (drone_VERSION_MAJOR 1)
 set (drone_VERSION_MINOR 0)
 
-set(drone_lib_files lib/drone/src/drone/ 
-	lib/drone/src/drone/drn_reader.c 
+#
+# drone lib file set
+#
+set(drone_lib_files lib/drone/src/drone/
+	lib/drone/src/drone/drn_reader.c
 	lib/drone/src/drone/drn_types.h
 	lib/drone/src/drone/drn_writer.h
 	lib/drone/src/drone/drn_writer.c
@@ -13,11 +16,17 @@ set(drone_lib_files lib/drone/src/drone/
 	lib/drone/src/drone/drn_reader.h
 )
 
-set(drone_scene_lib_files lib/drone_scene/src/drone_scene/ 
+#
+# drone_scene lib file set
+#
+set(drone_scene_lib_files lib/drone_scene/src/drone_scene/
 	lib/drone_scene/src/drone_scene/drone_scene.hpp
-	lib/drone_scene/src/drone_scene/drone_scene.cpp 
+	lib/drone_scene/src/drone_scene/drone_scene.cpp
  )
 
+#
+# stbi lib file set
+#
 set(stbi_lib_files lib/stbi/
 	lib/stbi/
 	lib/stbi/stb.h
@@ -35,6 +44,9 @@ link_directories(/usr/autodesk/maya/lib/)
 
 set(EXECUTABLE_OUTPUT_PATH bin)
 
+#
+# viewer
+#
 add_executable(viewer ${drone_lib_files} ${drone_scene_lib_files} ${stbi_lib_files}
 	samples/viewer/src/main.cpp
 	samples/viewer/src/HighResolutionTimer.hpp
@@ -55,21 +67,32 @@ add_executable(viewer ${drone_lib_files} ${drone_scene_lib_files} ${stbi_lib_fil
 	samples/viewer/src/ShaderGLSL.hpp
 	samples/viewer/src/ShaderGLSL.cpp
 )
-target_link_libraries(viewer rt glut GLU GL) 
+target_link_libraries(viewer rt glut GLU GL)
+
+#
+# drnread
+#
 add_executable(drnread ${drone_lib_files} ${drone_scene_lib_files} tools/drnread/drnread.cpp tools/drnread/getopt.c tools/drnread/getopt_long.c)
 add_definitions( -D_BOOL -DUNAME -DREQUIRE_IOSTREAM )
-add_library(drnmaya MODULE ${drone_lib_files} ${drone_scene_lib_files} ${stbi_lib_files} 
-	tools/drnmaya/src/Utils.cpp
-	tools/drnmaya/src/CameraExport.hpp
-	tools/drnmaya/src/SpotlightExport.hpp
-	tools/drnmaya/src/drnMayaPlugin.hpp
-	tools/drnmaya/src/drnTranslator.cpp
-	tools/drnmaya/src/SpotlightExport.cpp
-	tools/drnmaya/src/Utils.hpp
-	tools/drnmaya/src/CameraExport.cpp
-	tools/drnmaya/src/drnMayaPlugin.cpp
-	tools/drnmaya/src/MeshExport.hpp
-	tools/drnmaya/src/MeshExport.cpp
-	tools/drnmaya/src/drnTranslator.hpp
-)
-target_link_libraries(drnmaya OpenMaya Foundation OpenMayaUI  rt glut GLU GL) 
+
+#
+# drnmaya
+#
+if(WITH_MAYA)
+	set(CMAKE_SHARED_MODULE_PREFIX "")
+	add_library(drnmaya MODULE ${drone_lib_files} ${drone_scene_lib_files} ${stbi_lib_files}
+		tools/drnmaya/src/Utils.cpp
+		tools/drnmaya/src/CameraExport.hpp
+		tools/drnmaya/src/SpotlightExport.hpp
+		tools/drnmaya/src/drnMayaPlugin.hpp
+		tools/drnmaya/src/drnTranslator.cpp
+		tools/drnmaya/src/SpotlightExport.cpp
+		tools/drnmaya/src/Utils.hpp
+		tools/drnmaya/src/CameraExport.cpp
+		tools/drnmaya/src/drnMayaPlugin.cpp
+		tools/drnmaya/src/MeshExport.hpp
+		tools/drnmaya/src/MeshExport.cpp
+		tools/drnmaya/src/drnTranslator.hpp
+	)
+	target_link_libraries(drnmaya OpenMaya Foundation OpenMayaUI  rt glut GLU GL)
+endif(WITH_MAYA)
