@@ -40,11 +40,13 @@
 #define DRN_DBG_LVL2(EXP) EXP
 #endif
 
+
 struct DRNTParameters
 {
 	int startFrame;
 	int endFrame;
 	unsigned int subFrames;
+	MeshExportMode meshExportMode;
 };
 
 struct DRNTDagTable
@@ -199,9 +201,9 @@ MStatus DRNTranslator::writer ( const MFileObject& file,
 			// Write static data only for frame 0
 			if (i == 0)
 			{
-				writeMeshStaticDataInCache(&cacheWriter, *meshNodes[j], &meshContainers[j], hePerMesh[j]);
+				writeMeshStaticDataInCache(&cacheWriter, *meshNodes[j], &meshContainers[j], hePerMesh[j], params.meshExportMode);
 			}
-			writeMeshDynamicDataInCache(&cacheWriter, *meshNodes[j], &meshContainers[j], hePerMesh[j], meshDynContainers[j], i);
+			writeMeshDynamicDataInCache(&cacheWriter, *meshNodes[j], &meshContainers[j], hePerMesh[j], meshDynContainers[j], i, params.meshExportMode);
 		}
 		// Loop over all Cameras
 		for (unsigned int j = 0; j < cameraCount; ++j)
@@ -228,7 +230,7 @@ MStatus DRNTranslator::writer ( const MFileObject& file,
 	// Write mesh containers
 	for (unsigned int i = 0; i < meshCount; ++i)
 	{
-		writeMeshContainerInCache(& cacheWriter, *meshNodes[i], &meshContainers[i], meshDynContainers[i], frameCount);
+		writeMeshContainerInCache(& cacheWriter, *meshNodes[i], &meshContainers[i], meshDynContainers[i], frameCount, params.meshExportMode);
 	}
 	// Write camera containers
 	for (unsigned int i = 0; i < cameraCount; ++i)
@@ -295,14 +297,14 @@ bool buildDagPathArrayFromSelection(const MSelectionList & selection,
 			else if (dagPath.hasFn(MFn::kCamera))
 			{
 				if(!dagPath.hasFn(MFn::kTransform))
-				{					
+				{
 					dagPathArray.append(dagPath);
 				}
 			}
 			else if (dagPath.hasFn(MFn::kSpotLight))
 			{
 				if(!dagPath.hasFn(MFn::kTransform))
-				{					
+				{
 					dagPathArray.append(dagPath);
 				}
 			}
@@ -330,14 +332,14 @@ bool buildDagTableFromSelection(const MSelectionList & selection, DRNTDagTable &
 		{
 			DRN_DBG_LVL1(std::cout << "node:"<<i<<":type:camera"<<std::endl;;);
 			dagTable.nodes[i].type = DRN_SCENE_CAMERA;
-		}		
+		}
 		else if (dagPathArray[i].hasFn(MFn::kSpotLight) &&  !dagPathArray[i].hasFn(MFn::kTransform))
 		{
 			DRN_DBG_LVL1(std::cout << "node:"<<i<<":type:camera"<<std::endl;;);
 			dagTable.nodes[i].type = DRN_SCENE_SPOTLIGHT;
-		}		
+		}
 		else
-		{			
+		{
 			DRN_DBG_LVL1(std::cout << "node:"<<i<<":type:NONE"<<std::endl;;);
 			dagTable.nodes[i].type = DRN_SCENE_NONE;
 		}
@@ -388,7 +390,7 @@ bool writeMaterialsInCache(drn_writer_t * cache, DRNTDagTable & dagTable, drn_sc
 		float ambientColor[3] = {0.0f, 0.0f, 0.0f};
 		float transparency[3] = {0.0f, 0.0f, 0.0f};
 		float cosinePower = 0.f;
-		MPlug colorPlug = shaderNode.findPlug("color", &status);		
+		MPlug colorPlug = shaderNode.findPlug("color", &status);
 		if (status)
 		{
 			MPlugArray plugArray;
@@ -405,7 +407,7 @@ bool writeMaterialsInCache(drn_writer_t * cache, DRNTDagTable & dagTable, drn_sc
 				{
 					MString fileName = filePlug.asString();
 					int x,y,n;
-					unsigned char * data = stbi_load(fileName.asChar(), &x, &y, &n, 0);	
+					unsigned char * data = stbi_load(fileName.asChar(), &x, &y, &n, 0);
 					drn_scene::TextureContainer d;
 					d.width = x;
 					d.height = y;
@@ -415,7 +417,7 @@ bool writeMaterialsInCache(drn_writer_t * cache, DRNTDagTable & dagTable, drn_sc
 					d.data = drn_writer_get_last_chunk_id(cache);
 					stbi_image_free(data);
 					drnStatus = drn_writer_add_chunk(cache, &d, sizeof(drn_scene::TextureContainer));
-					materials[i].diffuseTexture = drn_writer_get_last_chunk_id(cache);		
+					materials[i].diffuseTexture = drn_writer_get_last_chunk_id(cache);
 				}
 			}
 			else
@@ -592,6 +594,7 @@ DRNTParameters defaultParameters()
 	params.startFrame = 1;
 	params.endFrame = 1;
 	params.subFrames = 0;
+	params.meshExportMode = MESH_EXPORT_FULL_TOPOLOGY;
 	return params;
 }
 
@@ -618,6 +621,19 @@ bool parseOptions( const MString & optionString, DRNTParameters & params)
 		{
 			params.subFrames = option[1].asInt();
 			DRN_DBG_LVL1(std::cout<<"parseOptions:subFrames:"<<params.subFrames<<std::endl;);
+		}
+		else if (option[0] == MString("meshExport"))
+		{
+			MString mode(option[1]);
+			if (mode ==  "Full")
+			{
+				params.meshExportMode = MESH_EXPORT_FULL_TOPOLOGY;
+			}
+			else if (mode == "Triangles")
+			{
+				params.meshExportMode = MESH_EXPORT_TRIANGLE_TOPOLOGY;
+			}
+			DRN_DBG_LVL1(std::cout<<"parseOptions:meshExport:"<<params.meshExportMode<<std::endl;);
 		}
 	}
 	return true;

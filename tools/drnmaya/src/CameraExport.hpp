@@ -6,13 +6,13 @@
 class DRNTDagNode;
 namespace drn_scene { class CameraContainer; class CameraDynamicDataContainer; }
 
-bool writeCameraContainerInCache(drn_writer_t * cache, 
-								  DRNTDagNode & node, 
-								  drn_scene::CameraContainer * cameraContainer, 
-								  drn_scene::CameraDynamicDataContainer * dynContainers, 
+bool writeCameraContainerInCache(drn_writer_t * cache,
+								  DRNTDagNode & node,
+								  drn_scene::CameraContainer * cameraContainer,
+								  drn_scene::CameraDynamicDataContainer * dynContainers,
 								  unsigned int frameCount);
-bool writeCameraStaticDataInCache(drn_writer_t * cache, 
-								  DRNTDagNode & node, 
+bool writeCameraStaticDataInCache(drn_writer_t * cache,
+								  DRNTDagNode & node,
 								  drn_scene::CameraContainer * cameraContainer);
 bool writeCameraDynamicDataInCache(drn_writer_t * cache,
 								 DRNTDagNode & node,

@@ -6,13 +6,13 @@
 class DRNTDagNode;
 namespace drn_scene { class SpotlightContainer; class SpotlightDynamicDataContainer; }
 
-bool writeSpotlightContainerInCache(drn_writer_t * cache, 
-								  DRNTDagNode & node, 
-								  drn_scene::SpotlightContainer * spotlightContainer, 
-								  drn_scene::SpotlightDynamicDataContainer * dynContainers, 
+bool writeSpotlightContainerInCache(drn_writer_t * cache,
+								  DRNTDagNode & node,
+								  drn_scene::SpotlightContainer * spotlightContainer,
+								  drn_scene::SpotlightDynamicDataContainer * dynContainers,
 								  unsigned int frameCount);
-bool writeSpotlightStaticDataInCache(drn_writer_t * cache, 
-								  DRNTDagNode & node, 
+bool writeSpotlightStaticDataInCache(drn_writer_t * cache,
+								  DRNTDagNode & node,
 								  drn_scene::SpotlightContainer * spotlightContainer);
 bool writeSpotlightDynamicDataInCache(drn_writer_t * cache,
 								 DRNTDagNode & node,

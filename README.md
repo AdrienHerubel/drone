@@ -40,7 +40,7 @@ viewer <cache> <cache_dir>
 
 * tools/drnread
 ```bash
-drnread -hlv <cache> 
+drnread -hlv <cache>
 ```
 
 * tools/drnmaya

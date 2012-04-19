@@ -114,12 +114,15 @@ namespace drn_scene
 				scene->meshes[meshIdx].numNormals = d->numNormals;
 				scene->meshes[meshIdx].numUVSets = d->numUVSets;
 				scene->meshes[meshIdx].defaultUVSet = d->defaultUVSet;
-				scene->meshes[meshIdx].vertexCountPerFace = (const int *) drn_get_chunk(cache, d->vertexCountPerFace);
-				scene->meshes[meshIdx].vertexListPerFace = (const int *) drn_get_chunk(cache, d->vertexListPerFace);
-				scene->meshes[meshIdx].normalCountPerFace = (const int *) drn_get_chunk(cache, d->normalCountPerFace);
-				scene->meshes[meshIdx].normalListPerFace = (const int *) drn_get_chunk(cache, d->normalListPerFace);
+				if (d->numPolygons)
+				{
+					scene->meshes[meshIdx].vertexCountPerFace = (const int *) drn_get_chunk(cache, d->vertexCountPerFace);
+					scene->meshes[meshIdx].vertexListPerFace = (const int *) drn_get_chunk(cache, d->vertexListPerFace);
+					scene->meshes[meshIdx].normalCountPerFace = (const int *) drn_get_chunk(cache, d->normalCountPerFace);
+					scene->meshes[meshIdx].normalListPerFace = (const int *) drn_get_chunk(cache, d->normalListPerFace);
+				}
 				scene->meshes[meshIdx].triangleList = (const int *) drn_get_chunk(cache, d->triangleList);
-				if (d->numUVSets)
+				if (d->numUVSets && d->numPolygons)
 				{
 					scene->meshes[meshIdx].uvSets = new UVSet[d->numUVSets];
 					const UVSetContainer * uvsContainers = (const UVSetContainer *) drn_get_chunk(cache, d->uvSets);
@@ -139,8 +142,11 @@ namespace drn_scene
 				for (uint64_t j = 0; j < scene->timeRange.numFrames; ++j)
 				{
 					scene->meshes[meshIdx].dynamicData[j].d = mddContainers + j;
-					scene->meshes[meshIdx].dynamicData[j].vertices = (const float *) drn_get_chunk(cache, mddContainers[j].vertices);
-					scene->meshes[meshIdx].dynamicData[j].normals = (const float *) drn_get_chunk(cache, mddContainers[j].normals);
+					if (d->numPolygons)
+					{
+						scene->meshes[meshIdx].dynamicData[j].vertices = (const float *) drn_get_chunk(cache, mddContainers[j].vertices);
+						scene->meshes[meshIdx].dynamicData[j].normals = (const float *) drn_get_chunk(cache, mddContainers[j].normals);
+					}
 					scene->meshes[meshIdx].dynamicData[j].hwVertices = (const float *) drn_get_chunk(cache, mddContainers[j].hwVertices);
 					scene->meshes[meshIdx].dynamicData[j].hwNormals = (const float *) drn_get_chunk(cache, mddContainers[j].hwNormals);
 				}

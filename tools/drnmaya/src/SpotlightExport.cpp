@@ -36,10 +36,10 @@
 #define DRNT_DBG_LVL2(EXP) EXP
 #endif
 
-bool writeSpotlightContainerInCache(drn_writer_t * cache, 
-								  DRNTDagNode & node, 
-								  drn_scene::SpotlightContainer * spotlightContainer, 
-								  drn_scene::SpotlightDynamicDataContainer * dynContainers, 
+bool writeSpotlightContainerInCache(drn_writer_t * cache,
+								  DRNTDagNode & node,
+								  drn_scene::SpotlightContainer * spotlightContainer,
+								  drn_scene::SpotlightDynamicDataContainer * dynContainers,
 								  unsigned int frameCount)
 {
 	int32_t status;
@@ -52,8 +52,8 @@ bool writeSpotlightContainerInCache(drn_writer_t * cache,
 	return status;
 }
 
-bool writeSpotlightStaticDataInCache(drn_writer_t * cache, 
-								  DRNTDagNode & node, 
+bool writeSpotlightStaticDataInCache(drn_writer_t * cache,
+								  DRNTDagNode & node,
 								  drn_scene::SpotlightContainer * spotlightContainer)
 {
 	MStatus status = MS::kSuccess;
@@ -83,7 +83,7 @@ bool writeSpotlightDynamicDataInCache(drn_writer_t * cache,
 	else if (decay == 1)
 		sd->decayRate = drn_scene::SpotlightDynamicDataContainer::LINEAR;
 	else if (decay == 2)
-		sd->decayRate = drn_scene::SpotlightDynamicDataContainer::QUADRATIC;	
+		sd->decayRate = drn_scene::SpotlightDynamicDataContainer::QUADRATIC;
 	sd->shadow = drn_scene::SpotlightDynamicDataContainer::NO_SHADOW;
 	if (spot.useDepthMapShadows())
 	{
@@ -94,7 +94,7 @@ bool writeSpotlightDynamicDataInCache(drn_writer_t * cache,
 		else
 		{
 			sd->shadow = drn_scene::SpotlightDynamicDataContainer::HARD;
-		}	
-	}	
+		}
+	}
 	return true;
 }

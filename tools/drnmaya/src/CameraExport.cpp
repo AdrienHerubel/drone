@@ -36,10 +36,10 @@
 #define DRNT_DBG_LVL2(EXP) EXP
 #endif
 
-bool writeCameraContainerInCache(drn_writer_t * cache, 
-								  DRNTDagNode & node, 
-								  drn_scene::CameraContainer * cameraContainer, 
-								  drn_scene::CameraDynamicDataContainer * dynContainers, 
+bool writeCameraContainerInCache(drn_writer_t * cache,
+								  DRNTDagNode & node,
+								  drn_scene::CameraContainer * cameraContainer,
+								  drn_scene::CameraDynamicDataContainer * dynContainers,
 								  unsigned int frameCount)
 {
 	int32_t status;
@@ -52,8 +52,8 @@ bool writeCameraContainerInCache(drn_writer_t * cache,
 	return status;
 }
 
-bool writeCameraStaticDataInCache(drn_writer_t * cache, 
-								  DRNTDagNode & node, 
+bool writeCameraStaticDataInCache(drn_writer_t * cache,
+								  DRNTDagNode & node,
 								  drn_scene::CameraContainer * cameraContainer)
 {
 	MStatus status = MS::kSuccess;

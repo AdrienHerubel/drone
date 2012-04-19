@@ -30,11 +30,11 @@ namespace drn_scene
 		float wDirection[4];
 		float color[4];
 		float intensity;
-		float angle;		
+		float angle;
 		enum DecayRate { NO_DECAY, LINEAR, QUADRATIC };
 		enum ShadowType { NO_SHADOW, HARD, SOFT };
 		enum DecayRate decayRate;
-		enum ShadowType shadow;		
+		enum ShadowType shadow;
 	};
 
 	struct SpotlightContainer

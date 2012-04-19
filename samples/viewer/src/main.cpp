@@ -77,7 +77,7 @@ namespace viewer
         std::vector<uint64_t> meshIdx;
         std::vector<uint32_t> samplerIdx;
         std::vector<uint64_t> primitiveSIdx;
-        uint64_t numTransparentPrimitives;        
+        uint64_t numTransparentPrimitives;
         // Textures
         std::vector<Sampler> samplers;
     };
@@ -323,16 +323,16 @@ void displayCallback(void)
     // Compute orthographic projection for fullscreen quad
     float orthoProj[16];
     ortho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0, orthoProj);
-    // Compute inverse of the projection matrix 
-    float projection[16];   
+    // Compute inverse of the projection matrix
+    float projection[16];
     float projectionT[16];
     float worldToView[16];
     mat4fCopy(projection, view->camera.perspectiveProjection());
     mat4fTranspose(projection, projectionT);
     float worldToViewT[16];
     float cameraPosition[4];
-    float viewProjection[16];       
-    float iviewProjection[16];      
+    float viewProjection[16];
+    float iviewProjection[16];
     // Choose camera
     if (states->camera == 0) // Default cam
     {
@@ -391,7 +391,7 @@ void displayCallback(void)
               0,
               m->numHwVertices * 3 * sizeof(float),
               m->dynamicData[frame].hwNormals);
-            gl[id] = 1;            
+            gl[id] = 1;
             GPUPrimitive_updateBuffer(p,
               1,
               m->numHwVertices * 3 * sizeof(float),
@@ -423,7 +423,7 @@ void displayCallback(void)
     GLuint location = glGetUniformLocation(program, "Projection");
     glUniformMatrix4fv(location, 1, 0, projection);
     location = glGetUniformLocation(program, "View");
-    glUniformMatrix4fv(location, 1, 0, worldToView); 
+    glUniformMatrix4fv(location, 1, 0, worldToView);
     location = glGetUniformLocation(program, "Object");
 
     //
@@ -480,7 +480,7 @@ void displayCallback(void)
         // Render primitive
         GPUPrimitive_render(p);
         ++p;
-    }    
+    }
 
     GLOBAL_VIEWER.render.forwardShader.shader.disable();
 
@@ -688,7 +688,7 @@ int main(int argc, char **argv)
         else
         {
             DRN_DBG_LVL1(std::cout << "Add file " << argv[i] << std::endl;);
-            addDRNScene(viewer::GLOBAL_VIEWER, argv[i]);        
+            addDRNScene(viewer::GLOBAL_VIEWER, argv[i]);
         }
     }
 

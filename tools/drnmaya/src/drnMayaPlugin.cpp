@@ -13,7 +13,7 @@ MStatus initializePlugin( MObject obj )
 											"drnTranslator",
 											NULL,
 											false);
-	if (!status) 
+	if (!status)
 	{
 		status.perror("Impossible to register drone exporter");
 		return status;
