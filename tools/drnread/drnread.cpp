@@ -53,7 +53,7 @@ int main (int argc, char **argv)
     }
     for (i = 0; i < drn_get_chunk_count(&cache); ++i)
     {
-        drn_desc_t desc = drn_get_desc(&cache, i); 
+        drn_desc_t desc = drn_get_desc(&cache, i);
         printf("desc:%lu:offset:%lu:size:%lu",i, desc.offset, desc.size);
         uint64_t j;
         for (j = 0; j < drn_get_map_count(&cache); ++j)

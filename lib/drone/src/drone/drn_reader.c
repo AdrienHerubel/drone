@@ -1,3 +1,8 @@
+#ifndef _MSC_VER /* Force 64 bits lseek offsets */
+#define _LARGEFILE64_SOURCE
+#define _FILE_OFFSET_BITS 64
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #ifdef _MSC_VER
